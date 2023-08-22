@@ -1,7 +1,5 @@
 # git-scm-hooks
 
-- Rewrite from [git-scm-hooks](https://github.com/toplenboren/git-scm-hooks) use ESModule
-
 
 ### What is a git hook?
 
