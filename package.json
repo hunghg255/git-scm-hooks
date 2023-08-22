@@ -1,6 +1,6 @@
 {
   "name": "git-scm-hooks",
-  "version": "0.0.1",
+  "version": "0.0.6",
   "license": "MIT",
   "sideEffects": false,
   "exports": {
@@ -27,24 +27,27 @@
     "release": "changeset publish",
     "lint": "tsc --noEmit",
     "start": "esno src/index.ts",
-    "test": "vitest"
+    "test": "vitest",
+    "postinstall": "git-scm-hooks",
+    "verify-commit": "verify-commit-msg"
   },
   "author": "hunghg255",
   "devDependencies": {
     "@changesets/cli": "^2.26.1",
     "@types/node": "^18.15.13",
     "esno": "^0.16.3",
-    "husky": "^8.0.3",
+    "git-scm-hooks": "^0.0.6",
     "terser": "^5.17.1",
     "tslib": "^2.5.2",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "verify-commit-msg": "^0.0.6"
   },
   "dependencies": {
-    "chokidar": "^3.5.3",
-    "commander": "^10.0.1",
-    "globby": "^13.1.4",
-    "jiti": "^1.18.2",
+    "commander": "^11.0.0",
     "unbuild": "^1.2.1"
   },
-  "keywords": []
+  "keywords": [],
+  "git-hooks": {
+    "commit-msg": "npm run verify-commit"
+  }
 }

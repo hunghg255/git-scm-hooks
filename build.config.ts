@@ -1,9 +1,11 @@
-import { defineBuildConfig } from 'unbuild'
+import { defineBuildConfig } from 'unbuild';
 
 export default defineBuildConfig({
   entries: [
     'src/index',
     'src/cli',
+    'src/postinstall',
+    'src/uninstall',
   ],
   clean: true,
   declaration: true,
@@ -14,4 +16,4 @@ export default defineBuildConfig({
       minify: true,
     },
   },
-})
+});

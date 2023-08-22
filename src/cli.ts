@@ -1,4 +1,4 @@
-import { startCli } from './cli-start'
-import { handleError } from './errors'
+import { startCli } from './cli-start';
+import { handleError } from './errors';
 
-startCli().catch(handleError)
+startCli().catch(handleError);
