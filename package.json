@@ -1,6 +1,6 @@
 {
   "name": "git-scm-hooks",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "license": "MIT",
   "sideEffects": false,
   "exports": {
@@ -46,8 +46,18 @@
     "commander": "^11.0.0",
     "unbuild": "^1.2.1"
   },
-  "keywords": [],
   "git-hooks": {
     "commit-msg": "npm run verify-commit"
+  },
+  "keywords": [
+    "Git Hooks"
+  ],
+  "bugs": {
+    "url": "https://github.com/hunghg255/git-scm-hooks/issues"
+  },
+  "homepage": "https://github.com/hunghg255/git-scm-hooks#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hunghg255/git-scm-hooks.git"
   }
 }
