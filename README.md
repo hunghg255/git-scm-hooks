@@ -43,6 +43,9 @@ If you need multiple verbose commands per git hook, flexible configuration or au
 
    ```jsonc
    {
+      "script": {
+        "prepare": "git-sc-hooks",
+      },
      "git-hooks": {
        "pre-commit": "npx lint-staged",
        "pre-push": "cd ../../ && npm run format",
@@ -61,9 +64,19 @@ If you need multiple verbose commands per git hook, flexible configuration or au
 
    This configuration is going to run all linters on every `commit` and formatter on `push`.
 
-   > There are more ways to configure the package. Check out [Additional configuration options](#additional-configuration-options).
+3. Config from file config
+  - Create `git-hooks.config.{js|ts}` file in the root of your project
 
-3. Run the CLI script to update the git hooks with the commands from the config:
+    ```js
+    import { defineConfig } from 'git-scm-hooks';
+
+    export default defineConfig({
+      "pre-commit": "npx lint-staged",
+      "pre-push": "cd ../../ && npm run format"
+    })
+    ```
+
+4. Run the CLI script to update the git hooks with the commands from the config:
 
    ```sh
    # [Optional] These 2 steps can be skipped for non-husky users
@@ -94,7 +107,7 @@ Note that you should manually run `npx git-scm-hooks` **every time you change a 
 }
 ```
 
-If you need to have multiple configuration files or just your-own configuration file, you install hooks manually from it by `npx git-scm-hooks ./my-config.js`.
+If you need to have multiple configuration files or just your-own configuration file, you install hooks manually from it by `npx git-scm-hooks my-config`.
 
 ### Uninstall git-scm-hooks
 

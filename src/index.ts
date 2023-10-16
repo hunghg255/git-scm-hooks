@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import color from 'picocolors';
+import { readConfig } from 'unreadconfig';
 
 const VALID_GIT_HOOKS = [
   'applypatch-msg',
@@ -31,9 +32,15 @@ const VALID_GIT_HOOKS = [
   'p4-post-changelist',
   'p4-pre-submit',
   'post-index-change',
-];
+] as const;
 
 const VALID_OPTIONS = ['preserveUnused'];
+
+type TGitHook = typeof VALID_GIT_HOOKS[number];
+
+export const defineConfig = (config: Partial<Record<TGitHook, any>>) => {
+  return config;
+}
 
 /**
  * Recursively gets the .git folder path from provided directory
@@ -159,7 +166,7 @@ function setHooksFromConfig(
   const config = _getConfig(projectRootPath, customConfigPath);
 
   if (!config) {
-    throw '[ERROR] Config was not found! Please add `.git-hooks.js` or `git-hooks.js` or `.git-hooks.json` or `git-hooks.json` or `git-hooks` entry in package.json.\r\nCheck README for details';
+    throw '[ERROR] Config was not found! Please add `git-hooks.config.ts` or `git-hooks.config.js` entry in package.json.\r\nCheck README for details';
   }
 
   const preserveUnused = Array.isArray(config.preserveUnused)
@@ -265,8 +272,8 @@ function _getPackageJson(projectPath = process.cwd()) {
  */
 function _getCustomConfigPath(argv = []) {
   // We'll run as one of the following:
-  // npx git-hooks ./config.js
-  // node path/to/git-hooks/cli.js ./config.js
+  // npx git-hooks config
+  // node path/to/git-hooks/cli.js config
   return argv[2] || '';
 }
 
@@ -280,6 +287,8 @@ function _getCustomConfigPath(argv = []) {
  * @return {{string: string} | undefined}
  * @private
  */
+const DEFAULT_FILE_NAME = 'git-hooks';
+
 function _getConfig(projectRootPath: any, configFileName = '') {
   if (typeof projectRootPath !== 'string') {
     throw TypeError(
@@ -290,18 +299,13 @@ function _getConfig(projectRootPath: any, configFileName = '') {
 
   // every function here should accept projectRootPath as first argument and return object
   const sources = [
-    () => _getConfigFromFile(projectRootPath, '.git-hooks.cjs'),
-    () => _getConfigFromFile(projectRootPath, '.git-hooks.js'),
-    () => _getConfigFromFile(projectRootPath, 'git-hooks.cjs'),
-    () => _getConfigFromFile(projectRootPath, 'git-hooks.js'),
-    () => _getConfigFromFile(projectRootPath, '.git-hooks.json'),
-    () => _getConfigFromFile(projectRootPath, 'git-hooks.json'),
+    () => readConfig(DEFAULT_FILE_NAME),
     () => _getConfigFromPackageJson(projectRootPath),
   ];
 
   // if user pass his-own config path prepend custom path before the default ones
   if (configFileName) {
-    sources.unshift(() => _getConfigFromFile(projectRootPath, configFileName));
+    sources.unshift(() => readConfig(configFileName));
   }
 
   for (let executeSource of sources) {
@@ -332,35 +336,6 @@ function _getConfigFromPackageJson(projectRootPath = process.cwd()) {
 }
 
 /**
- * Gets user-set config from file
- * Since the file is not required in node.js projects it returns undefined if something is off
- * @param {string} projectRootPath
- * @param {string} fileName
- * @return {{string: string} | undefined}
- */
-function _getConfigFromFile(projectRootPath: any, fileName: any) {
-  if (typeof projectRootPath !== 'string') {
-    throw TypeError('projectRootPath is not a string');
-  }
-
-  if (typeof fileName !== 'string') {
-    throw TypeError('fileName is not a string');
-  }
-
-  try {
-    const filePath = path.isAbsolute(fileName)
-      ? fileName
-      : path.normalize(projectRootPath + '/' + fileName);
-    if (filePath === __filename) {
-      return undefined;
-    }
-    return require(filePath); // handle `.js` and `.json`
-  } catch (err) {
-    return undefined;
-  }
-}
-
-/**
  * Validates the config, checks that every git hook or option is named correctly
  * @return {boolean}
  * @param {{string: string}} config
@@ -368,7 +343,7 @@ function _getConfigFromFile(projectRootPath: any, fileName: any) {
 function _validateHooks(config: any) {
   for (let hookOrOption in config) {
     if (
-      !VALID_GIT_HOOKS.includes(hookOrOption) &&
+      !VALID_GIT_HOOKS.includes(hookOrOption as any) &&
       !VALID_OPTIONS.includes(hookOrOption)
     ) {
       return false;

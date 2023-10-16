@@ -1,6 +1,6 @@
 {
   "name": "git-scm-hooks",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "license": "MIT",
   "sideEffects": false,
   "exports": {
@@ -28,7 +28,7 @@
     "lint": "tsc --noEmit",
     "start": "esno src/index.ts",
     "test": "vitest",
-    "postinstall": "git-scm-hooks",
+    "test1": "node ./dist/cli.mjs",
     "verify-commit": "verify-commit-msg"
   },
   "author": "hunghg255",
@@ -44,10 +44,8 @@
   },
   "dependencies": {
     "commander": "^11.0.0",
-    "unbuild": "^1.2.1"
-  },
-  "git-hooks": {
-    "commit-msg": "npm run verify-commit"
+    "unbuild": "^1.2.1",
+    "unreadconfig": "^0.0.12"
   },
   "keywords": [
     "Git Hooks"
