@@ -44,7 +44,7 @@ If you need multiple verbose commands per git hook, flexible configuration or au
    ```jsonc
    {
       "script": {
-        "prepare": "git-sc-hooks",
+        "prepare": "git-scm-hooks",
       },
      "git-hooks": {
        "pre-commit": "npx lint-staged",
