@@ -1,6 +1,7 @@
 {
   "name": "git-scm-hooks",
-  "version": "0.1.0",
+  "type": "module",
+  "version": "0.2.0",
   "license": "MIT",
   "sideEffects": false,
   "main": "./dist/index.cjs",
